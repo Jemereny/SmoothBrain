@@ -13,6 +13,7 @@ These guidelines are not meant to be followed strictly as guidelines are always 
 - [Guards](#guards)
 - [Business Logic vs Application Logic](#business-logic-vs-application-logic)
 - [Logging and Throwing errors](#logging-and-throwing-errors)
+- [Defining API Endpoint paths](#defining-api-endpoint-paths)
 
 # Meaningful names
 As much as possible, code should always be self-explanatory. Variables and methods should always have meaningful names to describe the context, or function of what it does. It is always good to double-check if the name used is confusing or if it has a different meaning. For example, bi-weekly has two meanings; twice a week or once every two weeks in American English. While in British English, bi-weekly means twice a week and fortnightly means once every two weeks.
@@ -66,3 +67,30 @@ When catching errors, the code that catches the error should be able to handle t
 1. catch privileged information and throw a new exception unrelated to the caught exception.
 
 However, it is not recommended to log an error and throw the same error out as there is no way for the upstream to know if the exception has already been logged. If the upstream follows the same pattern of logging and re-throwing, the same exception will be logged more than once.
+
+# Defining API Endpoint paths
+
+Depending on the context of the situation, an endpoint may either perform an action or be a CRUD operation. In both situations, endpoints usually perform an operation on a resource. There are a few guidelines to follow. The recommended way to create endpoint paths is to look at what resource the operation is being performed on and create the path based on the hierarchy of the resource. 
+
+Example in CRUD (RESTful): 
+```
+1. GET /libraries/{libraryId}/books/{bookId} - Gets information on a single book
+2. GET /libraries/{libraryId}/books - Gets all books in the particular library.
+3. POST /libraries/{libraryId}/books - Performs a POST to create a book
+4. PUT /libraries/{libraryId}/books - Performs a PUT to update a book
+```
+
+
+As the above example shows, it usually ends with /{Plural Noun}/{ID of item} or /{Plural Noun}. However, there can be exceptions where the endpoint defines an action or a specific use case where it does not fully follow the REST convention.
+
+Example (REST):
+```
+1. POST /loan - User loans a book (Normal CRUD)
+2. POST /loan/{loanId}/return - User returns a book (action)
+```
+
+As seen in the example, the second point is an action where it does not follow all of the REST convention. The URL ends with a verb, which describes the action that will be taken by the endpoint.
+
+REST - Some REST principles
+
+RESTful - Full REST principles
